@@ -342,15 +342,16 @@
         "tullia": "tullia"
       },
       "locked": {
-        "lastModified": 1670020680,
-        "narHash": "sha256-rACYuyvOTwUZQp+RqMLTFzSnvCfcfa2x4Wph1mZ5sAw=",
-        "owner": "input-output-hk",
+        "lastModified": 1670132514,
+        "narHash": "sha256-sxPnq4UDtn9D6w9hPSGRbcREeBs6scmdwC+gMo0rGTQ=",
+        "owner": "peterbecich",
         "repo": "haskell.nix",
-        "rev": "df280ea27a8324106c83524bcdd9eb1592537c26",
+        "rev": "1957a1655e5cc56f5b4bd28ca56e1949f7a8da76",
         "type": "github"
       },
       "original": {
-        "owner": "input-output-hk",
+        "owner": "peterbecich",
+        "ref": "shell-tool-mappings",
         "repo": "haskell.nix",
         "type": "github"
       }
