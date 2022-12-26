@@ -1,0 +1,25 @@
+name: "Nix Flake Build"
+on: [push, pull_request]
+
+jobs:
+  tests:
+    timeout-minutes: 300
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+    - uses: actions/checkout@v3.2.0
+    # https://github.com/marketplace/actions/install-nix
+    - name: Install Nix
+      uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: |
+          trusted-public-keys = hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          substituters = https://hydra.iohk.io https://cache.nixos.org/
+          allow-import-from-derivation = true
+          keep-outputs = true
+          keep-derivations = true
+          accept-flake-config = true
+    - run: nix build
+    - run: nix flake check
