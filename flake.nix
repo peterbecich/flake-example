@@ -11,7 +11,7 @@
                        hixProject =
                          final.haskell-nix.hix.project {
                            src = ./.;
-                           evalSystem = builtins.currentSystem or "x86_64-linux";
+                           evalSystem = "x86_64-darwin";
                          };
                      })
                    ];
