@@ -1,27 +1,61 @@
 {
+  description = "flake example";
   # This is a template created by `hix init`
-  inputs.haskellNix.url = "github:input-output-hk/haskell.nix";
-  inputs.nixpkgs.follows = "haskellNix/nixpkgs-unstable";
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  outputs = { self, nixpkgs, flake-utils, haskellNix }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        overlays = [ haskellNix.overlay
-                     (final: prev: {
-                       hixProject =
-                         final.haskell-nix.hix.project {
-                           src = ./.;
-                           evalSystem = "x86_64-darwin";
-                         };
-                     })
-                   ];
-        pkgs = import nixpkgs { inherit system overlays; inherit (haskellNix) config; };
-        flake = pkgs.hixProject.flake {};
-      in flake // {
-        legacyPackages = pkgs;
+  inputs = {
+    haskellNix.url = "github:input-output-hk/haskell.nix";
+    nixpkgs.follows = "haskellNix/nixpkgs-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-flake.url = "github:srid/treefmt-flake";
+  };
 
-        packages.default = flake.packages."hello:exe:hello";
-      });
+
+  outputs = inputs@{ self, flake-parts, nixpkgs, haskellNix, treefmt-flake, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        # To import a flake module
+        # 1. Add foo to inputs
+        # 2. Add foo as a parameter to the outputs function
+        # 3. Add here: foo.flakeModule
+
+      ];
+      systems = [ "x86_64-linux" "aarch64-darwin" ];
+      perSystem = { config, self', inputs', pkgs, system, ... }:
+        let
+          projectName = "flake-example";
+          overlays = [
+            haskellNix.overlay
+            (final: prev: {
+              ${projectName} = final.haskell-nix.cabalProject {
+                src = ./.;
+                compiler-nix-name = "ghc943";
+                shell.tools = {
+                  cabal = { };
+                  hlint = { };
+                  ghcid = { };
+                  # haskell-language-server = {};
+                };
+                modules = [
+                ];
+              };
+            })
+          ];
+          pkgs = import nixpkgs { inherit system overlays; };
+          haskellNixFlake = pkgs.${projectName}.flake { };
+        in
+          pkgs.lib.recursiveUpdate
+            (builtins.removeAttrs haskellNixFlake [ "devShell" ])
+            {
+              # treefmt.formatters = {
+              #   inherit (pkgs) nixpkgs-fmt;
+              #   inherit (pkgs.haskellPackages)
+              #     cabal-fmt
+              #     fourmolu;
+              # };
+              packages.default = haskellNixFlake.packages."${projectName}:exe:hello";
+              devShells.default = haskellNixFlake.devShell;
+            };
+    };
 
   # --- Flake Local Nix Configuration ----------------------------
   nixConfig = {

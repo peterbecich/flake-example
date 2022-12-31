@@ -188,6 +188,24 @@
         "type": "github"
       }
     },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1672152762,
+        "narHash": "sha256-U8iWWHgabN07zfbgedogMVWrEP1Zywyf3Yx3OYHSSgE=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "19e0f88324d90509141e192664ded98bb88ef9b2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -673,6 +691,24 @@
         "type": "github"
       }
     },
+    "nixpkgs-lib": {
+      "locked": {
+        "dir": "lib",
+        "lastModified": 1671359686,
+        "narHash": "sha256-3MpC6yZo+Xn9cPordGz2/ii6IJpP2n8LE8e/ebUXLrs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "04f574a1c0fde90b51bf68198e2297ca4e7cccf4",
+        "type": "github"
+      },
+      "original": {
+        "dir": "lib",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-regression": {
       "locked": {
         "lastModified": 1643052045,
@@ -770,12 +806,14 @@
     },
     "root": {
       "inputs": {
+        "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "haskellNix": "haskellNix",
         "nixpkgs": [
           "haskellNix",
           "nixpkgs-unstable"
-        ]
+        ],
+        "treefmt-flake": "treefmt-flake"
       }
     },
     "stackage": {
@@ -829,6 +867,21 @@
       "original": {
         "owner": "divnix",
         "repo": "std",
+        "type": "github"
+      }
+    },
+    "treefmt-flake": {
+      "locked": {
+        "lastModified": 1669929251,
+        "narHash": "sha256-+qgCD89JyZhBNF4m/HuuVrpoRoXMTl5F60mJzr3QPNM=",
+        "owner": "srid",
+        "repo": "treefmt-flake",
+        "rev": "86341cd4a0ce21556a348fd27a4797997d27be00",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "repo": "treefmt-flake",
         "type": "github"
       }
     },
