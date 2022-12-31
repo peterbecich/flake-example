@@ -24,5 +24,5 @@ jobs:
           accept-flake-config = true
     - run: |
         nix build
-    - run: |
-        nix flake check
+    # - run: |
+    #     nix flake check

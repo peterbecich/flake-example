@@ -35,7 +35,7 @@
           project = pkgs.haskell-nix.cabalProject' {
             inherit evalSystem;
             src = ./.;
-            compiler-nix-name = "ghc943";
+            compiler-nix-name = "ghc925";
             shell.tools = tools;
             materialized = materializedFor "project";
           };
