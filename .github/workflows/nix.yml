@@ -23,14 +23,6 @@ jobs:
           keep-derivations = true
           accept-flake-config = true
     - run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          nix build
-        else
-          nix build --impure
-        fi
+        nix build
     - run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          nix flake check
-        else
-          nix flake check --impure
-        fi
+        nix flake check
