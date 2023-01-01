@@ -1,8 +1,12 @@
 {
+
+  description = "Flake example";
+
   # This is a template created by `hix init`
   inputs.haskell-nix.url = "github:input-output-hk/haskell.nix";
   inputs.nixpkgs.follows = "haskell-nix/nixpkgs-unstable";
-  inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flake-utils.follows = "haskell-nix/flake-utils";
+  # inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils, haskell-nix }@inputs: let
     supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
@@ -89,19 +93,20 @@
       hydraJobs = self.packages.${evalSystem};
     });
   in flake inputs // {
-    hydraJobs = { nixpkgs ? inputs.nixpkgs, flake-utils ? inputs.flake-utils, haskell-nix ? inputs.haskell-nix }@overrides: let
-      flake' = flake (inputs // overrides // { self = flake'; });
-      evalSystem = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${evalSystem};
-    in flake'.hydraJobs // {
-      forceNewEval = pkgs.writeText "forceNewEval" (self.rev or self.lastModified);
-      required = pkgs.releaseTools.aggregate {
-        name = "cicero-pipe";
-        constituents = builtins.concatMap (system:
-          map (x: "${x}.${system}") (builtins.attrNames flake'.hydraJobs)
-        ) supportedSystems;
+    hydraJobs =
+      let
+        flake' = flake (inputs // { self = flake'; });
+        evalSystem = "x86_64-linux";
+        pkgs = nixpkgs.legacyPackages.${evalSystem};
+      in flake'.hydraJobs // {
+        forceNewEval = pkgs.writeText "forceNewEval" (self.rev or self.lastModified);
+        required = pkgs.releaseTools.aggregate {
+          name = "flake-example";
+          constituents = builtins.concatMap (system:
+            map (x: "${x}.${system}") (builtins.attrNames flake'.hydraJobs)
+          ) supportedSystems;
+        };
       };
-    };
   };
 
   # --- Flake Local Nix Configuration ----------------------------
