@@ -1,0 +1,8 @@
+
+packages: .
+
+package flake-example
+  ghc-options: -Wall
+
+write-ghc-environment-files: never
+tests: true
